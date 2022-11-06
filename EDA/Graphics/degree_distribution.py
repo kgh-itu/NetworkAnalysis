@@ -9,7 +9,7 @@ from network.init_network import init_network
 save_fig_path = "EDA/Graphics/figures_pngs"
 
 
-def plot_ccdf(G, loglog=False, savefig=False):
+def plot_ccdf(G, loglog=False, savefig=False) -> None:
     degree_count = get_degree_count(G)
     ccdf = degree_count.sort_values(by="degree", ascending=False)
     ccdf["cum_sum"] = ccdf["count"].cumsum()
@@ -21,12 +21,13 @@ def plot_ccdf(G, loglog=False, savefig=False):
     ax.set_ylabel("Probability (%)")
     ax.set_title("CCDF (Complementary Cumulative Distribution Function)")
     plt.show()
+
     if savefig:
         current_time = datetime.datetime.now().strftime("%d-%m-%Y%---%H:%M:%S")
         fig.savefig(f"{save_fig_path}/ccdf_{current_time}.png")
 
 
-def plot_degree_distribution(G, loglog=False, savefig=False):
+def plot_degree_distribution(G, loglog=False, savefig=False) -> None:
     degree_count = get_degree_count(G)
     degree_dist = degree_count.sort_values(by="degree")
     fig, ax = _get_ax_and_fig(data=degree_dist, x="degree", y="count",
@@ -35,18 +36,19 @@ def plot_degree_distribution(G, loglog=False, savefig=False):
     ax.set_ylabel("Count")
     ax.set_title("Degree Distribution")
     plt.show()
+
     if savefig:
         current_time = datetime.datetime.now().strftime("%d-%m-%Y%---%H:%M:%S")
         fig.savefig(f"{save_fig_path}/degree_distribution_{current_time}.png")
 
 
-def get_degree_count(G):
+def get_degree_count(G) -> pd.DataFrame:
     degree_count = Counter(dict(G.degree).values())
     degree_count = pd.DataFrame(list(degree_count.items()), columns=("degree", "count"))
     return degree_count
 
 
-def _get_ax_and_fig(data, x, y, kind="scatter", loglog=False):
+def _get_ax_and_fig(data, x, y, kind="scatter", loglog=False) -> (plt.Figure, plt.axes):
     fig, ax = plt.subplots(figsize=(9, 4.8))
     custom_plot_style()
     if kind == "line":
@@ -62,5 +64,5 @@ def _get_ax_and_fig(data, x, y, kind="scatter", loglog=False):
 
 if __name__ == "__main__":
     G_ = init_network()
-    plot_ccdf(G_, savefig=True, loglog=False)
-    plot_degree_distribution(G_, savefig=True, loglog=False)
+    plot_ccdf(G_, savefig=False, loglog=False)
+    plot_degree_distribution(G_, savefig=False, loglog=False)
