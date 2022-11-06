@@ -9,16 +9,16 @@ from network.init_network import init_network
 save_fig_path = "EDA/Graphics/figures_pngs"
 
 
-def plot_ccdf(G, loglog=False, savefig=False) -> None:
+def plot_ccdf(G, savefig=False) -> None:
     degree_count = get_degree_count(G)
     ccdf = degree_count.sort_values(by="degree", ascending=False)
     ccdf["cum_sum"] = ccdf["count"].cumsum()
     ccdf["prob"] = ccdf["cum_sum"] / ccdf["count"].sum()
     ccdf = ccdf[["degree", "prob"]].sort_values(by="degree")
     fig, ax = _get_ax_and_fig(data=ccdf, x="degree", y="prob",
-                              kind="line", loglog=loglog)
+                              kind="line", loglog=True)
     ax.set_xlabel("Degree")
-    ax.set_ylabel("Probability (%)")
+    ax.set_ylabel("P(Degree > x)")
     ax.set_title("CCDF (Complementary Cumulative Distribution Function)")
     plt.show()
 
@@ -64,5 +64,5 @@ def _get_ax_and_fig(data, x, y, kind="scatter", loglog=False) -> (plt.Figure, pl
 
 if __name__ == "__main__":
     G_ = init_network()
-    plot_ccdf(G_, savefig=False, loglog=False)
+    plot_ccdf(G_, savefig=False)
     plot_degree_distribution(G_, savefig=False, loglog=False)
