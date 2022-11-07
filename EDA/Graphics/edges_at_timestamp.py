@@ -11,7 +11,7 @@ from EDA.Graphics.utils.style import custom_plot_style
 def plot_edge_count(start_timestamp=0, end_timestamp=np.inf, savefig=False) -> None:
     data = select_network_between_timestamps(start_timestamp, end_timestamp)
     data = data.groupby("timestamp")["source"].count()
-    fig, ax = plt.subplots(figsize=(9, 4.8))
+    fig, ax = plt.subplots(figsize=(9, 5))
     custom_plot_style()
     ax.xaxis.set_major_formatter(FuncFormatter(format_float_ticks))
     ax.set_xlabel("Timestamp")

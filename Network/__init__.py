@@ -1,0 +1,2 @@
+from Network.init_network import init_network, get_largest_connected_component
+
