@@ -7,8 +7,6 @@ from data_import.load_data import select_network_between_timestamps
 from EDA.Graphics.utils.tools import format_float_ticks
 from EDA.Graphics.utils.style import custom_plot_style
 
-save_fig_path = "EDA/Graphics/figures_pngs"
-
 
 def plot_edge_count(start_timestamp=0, end_timestamp=np.inf, savefig=False) -> None:
     data = select_network_between_timestamps(start_timestamp, end_timestamp)
@@ -24,7 +22,7 @@ def plot_edge_count(start_timestamp=0, end_timestamp=np.inf, savefig=False) -> N
 
     if savefig:
         current_time = datetime.datetime.now().strftime("%d-%m-%Y%---%H:%M:%S")
-        fig.savefig(f"{save_fig_path}/edge_count_from_{current_time}")
+        fig.savefig(f"edge_count_from_{current_time}.png")
 
 
 if __name__ == "__main__":

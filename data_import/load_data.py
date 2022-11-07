@@ -8,7 +8,7 @@ def select_network_between_timestamps(start_timestamp=0, end_timestamp=np.inf) -
 
 
 def load_network_as_frame() -> pd.DataFrame:
-    network_csv_path = "raw_data/edges.csv"
+    network_csv_path = "https://raw.githubusercontent.com/kgh-itu/NetworkAnalysis/72b62762ab947ad719a0bd5a4763116eef8b7b56/raw_data/edges.csv"
     col_map = {"# source": "source", " target": "target", " rssi": "rssi", " timestamp": "timestamp"}
     return pd.read_csv(network_csv_path).rename(columns=col_map)
 
