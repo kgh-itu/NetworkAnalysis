@@ -37,14 +37,15 @@ def plot_ccdf(G, savefig=False) -> None:
     return ax
 
 
-def plot_degree_distribution(G, loglog=False, savefig=False) -> None:
+def plot_degree_distribution(G, loglog=False, savefig=False, density=True) -> None:
     degree_count = get_degree_count(G)
     degree_dist = degree_count.sort_values(by="degree")
     fig, ax = _get_ax_and_fig(data=degree_dist, x="degree",
-                              kind="hist", loglog=loglog)
+                              kind="hist", loglog=loglog,
+                              density=density)
 
     ax.set_xlabel("Degree")
-    ax.set_ylabel("Frequency")
+    ax.set_ylabel("Probability")
     ax.set_title("Degree Distribution")
     plt.show()
 
@@ -116,5 +117,5 @@ def _get_ax_and_fig(data, x, y=None, kind="scatter", loglog=False, c="#444444", 
 
 if __name__ == "__main__":
     G_ = init_network(113500, 150000)
-    plot_degree_distribution(G_, savefig=True)
+    plot_degree_distribution(G_, savefig=False)
     plot_ccdf(G_, savefig=False)
