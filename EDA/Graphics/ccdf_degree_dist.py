@@ -22,10 +22,12 @@ def plot_ccdf(G, savefig=False) -> None:
                               kind="line", loglog=True, c="#e41a1c",
                               label="CCDF")
 
+    custom_plot_style()
+
     ax.plot(ccdf["degree"], ccdf["lin_reg_fit"], label="Fit")
-    ax.legend()
+    ax.legend(fancybox=False)
     ax.set_xlabel("Degree")
-    ax.set_ylabel("P(Degree >= x)")
+    ax.set_ylabel("P(X >= Degree)")
     ax.set_title("CCDF (Complementary Cumulative Distribution Function)")
     plt.show()
 
@@ -98,7 +100,6 @@ def calculate_ccdf(data) -> pd.DataFrame:
 
 def _get_ax_and_fig(data, x, y=None, kind="scatter", loglog=False, c="#444444", **kwargs) -> (plt.Figure, plt.axes):
     fig, ax = plt.subplots(figsize=(9, 5))
-    custom_plot_style()
     if kind == "line":
         ax.plot(x, y, data=data, c=c, **kwargs)
     elif kind == "hist":
@@ -108,9 +109,13 @@ def _get_ax_and_fig(data, x, y=None, kind="scatter", loglog=False, c="#444444", 
     if loglog:
         plt.yscale('log')
         plt.xscale('log')
+
+    custom_plot_style()
+    plt.tight_layout(pad=2)
     return fig, ax
 
 
 if __name__ == "__main__":
     G_ = init_network(113500, 150000)
-    plot_ccdf(G_)
+    plot_degree_distribution(G_, savefig=True)
+    plot_ccdf(G_, savefig=False)
