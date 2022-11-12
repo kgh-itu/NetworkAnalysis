@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-import networkx as nx
 import pandas as pd
 import datetime
 from collections import Counter
@@ -26,7 +25,7 @@ def plot_ccdf(G, savefig=False) -> None:
     ax.plot(ccdf["degree"], ccdf["lin_reg_fit"], label="Fit")
     ax.legend()
     ax.set_xlabel("Degree")
-    ax.set_ylabel("P(Degree > x)")
+    ax.set_ylabel("P(Degree >= x)")
     ax.set_title("CCDF (Complementary Cumulative Distribution Function)")
     plt.show()
 
