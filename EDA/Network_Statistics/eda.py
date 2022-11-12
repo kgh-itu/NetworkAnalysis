@@ -2,42 +2,33 @@ import networkx as nx
 import pandas as pd
 
 from Network import init_network
-from functools import lru_cache
 from pretty_html_table import build_table
-from decimal import *
 
 
-@lru_cache()
-def eda_caller(G):
-    funcs = [get_number_of_nodes, get_number_of_edges, get_average_degree,
-             get_average_clustering, get_average_shortest_path,
-             get_diameter, get_degree_centrality, get_betweenness_centrality,
-             get_closeness_centrality, get_max_degree, get_min_degree]
+def get_all_network_eda(G, eda_funcs=None) -> dict:
+    EDA = {}
+    if eda_funcs is None:
+        eda_funcs = [get_number_of_nodes, get_number_of_edges, get_average_degree,
+                     get_average_clustering, get_average_shortest_path,
+                     get_diameter, get_max_degree, get_min_degree,
+                     get_degree_centrality, get_betweenness_centrality, get_closeness_centrality]
 
-    func_description = ["# Nodes", "# Edges", "Average Degree",
-                        "Average Clustering", "Average Shortest Path",
-                        "Diameter", "Degree Centrality", "Betweenness Centrality",
-                        "Closeness Centrality", "Max Degree", "Min Degree"]
+    for func in eda_funcs:
+        func(G, EDA)
 
-    eda = {}
-
-    func_dict = zip(funcs, func_description)
-
-    for func, description in func_dict:
-        eda[description] = func(G)
-
-    return eda
+    return EDA
 
 
-def extract_single_valued_statistics_to_dataframe(eda):
+def get_single_valued_eda_to_dataframe(eda) -> pd.DataFrame:
+    """Gets all EDA with only 1 value for the entire graph into a dataframe
+    Other eda that has to do with each node is not in output dataframe"""
     eda = {k: v for k, v in eda.items() if type(v) in [float, int]}
     eda = pd.DataFrame(eda.items())
 
     def __format(x):
         """very disgusting must be fixed"""
         x = round(x, 2)
-        x = str(x)
-        return x.replace(".0", "")
+        return str(x).replace(".0", "")
 
     eda[1] = eda[1].apply(__format)
     eda = eda.rename(columns={0: "", 1: ""})
@@ -45,40 +36,40 @@ def extract_single_valued_statistics_to_dataframe(eda):
     return eda
 
 
-def formatNumber(num):
-    if num % 1 == 0:
-        return int(num)
-    else:
-        return num
-
-
-def build_eda_html(eda: pd.DataFrame, **kwargs):
+def build_eda_html(eda: pd.DataFrame, g, filename="eda.html", **kwargs):
     html = build_table(eda, color="grey_dark", **kwargs)
-    with open("eda.html", "w") as f:
+    html += f"<p style='font-family:monospace; font-size:15px; font-weight:normal'>" \
+            f"Graph between timestamps ({g.start_timestamp}, {g.end_timestamp})" \
+            f"</p>"
+    with open(filename, "w") as f:
         f.write(html)
 
 
-def get_number_of_nodes(G):
-    return len(G.nodes())
+def get_number_of_nodes(G, eda):
+    num_nodes = len(G.nodes())
+    eda["# Nodes"] = num_nodes
 
 
-def get_number_of_edges(G):
-    return len(G.edges())
+def get_number_of_edges(G, eda):
+    num_edges = len(G.edges())
+    eda["# Edges"] = num_edges
 
 
-def get_average_degree(G):
+def get_average_degree(G, eda):
     degrees = list(dict(G.degree()).values())
     average_degree = sum(degrees) / len(degrees)
-    return round(average_degree)
+    eda["Average Degree"] = average_degree
 
 
-def get_average_clustering(G):
-    return nx.average_clustering(G)
+def get_average_clustering(G, eda):
+    avg_clustering = nx.average_clustering(G)
+    eda["Average Clustering"] = avg_clustering
 
 
-def get_average_shortest_path(G):
+def get_average_shortest_path(G, eda):
     try:
-        return nx.average_shortest_path_length(G)
+        average_shortest_path = nx.average_shortest_path_length(G)
+        eda["Average Shortest Path"] = average_shortest_path
 
     except nx.NetworkXError as error:
         if "Found infinite path length because the graph is not connected" in str(error):
@@ -87,9 +78,10 @@ def get_average_shortest_path(G):
                                    "initializing network")
 
 
-def get_diameter(G):
+def get_diameter(G, eda):
     try:
-        return nx.diameter(G)
+        diameter = nx.diameter(G)
+        eda["Diameter"] = diameter
 
     except nx.NetworkXError as error:
         if "Found infinite path length because the graph is not connected" in str(error):
@@ -98,28 +90,33 @@ def get_diameter(G):
                                    "initializing network")
 
 
-def get_degree_centrality(G):
-    return nx.degree_centrality(G)
+def get_degree_centrality(G, eda):
+    degree_centrality = nx.degree_centrality(G)
+    eda["Degree Centrality"] = degree_centrality
 
 
-def get_betweenness_centrality(G):
-    return nx.betweenness_centrality(G)
+def get_betweenness_centrality(G, eda):
+    betweenness_centrality = nx.betweenness_centrality(G)
+    eda["Betweenness Centrality"] = betweenness_centrality
 
 
-def get_closeness_centrality(G):
-    return nx.closeness_centrality(G)
+def get_closeness_centrality(G, eda):
+    closeness_centrality = nx.closeness_centrality(G)
+    eda["Closeness Centrality"] = closeness_centrality
 
 
-def get_max_degree(G):
-    return max(dict(G.degree).values())
+def get_max_degree(G, eda):
+    max_degree = max(dict(G.degree).values())
+    eda["Max Degree"] = max_degree
 
 
-def get_min_degree(G):
-    return min(dict(G.degree).values())
+def get_min_degree(G, eda):
+    min_degree = min(dict(G.degree).values())
+    eda["Min Degree"] = min_degree
 
 
 if __name__ == "__main__":
-    G0 = init_network(113500, 150000)
-    eda_ = eda_caller(G0)
-    a = extract_single_valued_statistics_to_dataframe(eda_)
-    build_eda_html(a, font_family="monospace")
+    G_ = init_network(113500, 150000)
+    eda0 = get_all_network_eda(G_)
+    eda1 = get_single_valued_eda_to_dataframe(eda0)
+    build_eda_html(eda1, G_, font_family="monospace", width_dict=["500px", "500px"], font_size="15px")

@@ -22,13 +22,12 @@ def plot_ccdf(G, savefig=False) -> None:
                               kind="line", loglog=True, c="#e41a1c",
                               label="CCDF")
 
-    custom_plot_style()
-
     ax.plot(ccdf["degree"], ccdf["lin_reg_fit"], label="Fit")
     ax.legend(fancybox=False)
     ax.set_xlabel("Degree")
     ax.set_ylabel("P(X >= Degree)")
     ax.set_title("CCDF (Complementary Cumulative Distribution Function)")
+    custom_plot_style()
     plt.show()
 
     if savefig:
