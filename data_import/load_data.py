@@ -14,4 +14,4 @@ def load_network_as_frame() -> pd.DataFrame:
 
 
 if __name__ == "__main__":
-    data_ = select_network_between_timestamps(0,  10000)
+    data_ = select_network_between_timestamps(113500, 150000)

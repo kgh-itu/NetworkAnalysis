@@ -22,6 +22,14 @@ def _get_largest_connected_component(G):
     return G.subgraph(largest_component)
 
 
+def get_timestamp_corresponding_to_day(day=0):
+    start = 113500
+    end = 150000
+
+    start, end = 86400 * day + start, 86400 * day + end
+
+    return start, end
+
+
 if __name__ == "__main__":
     G0 = init_network(113500, 150000)
-

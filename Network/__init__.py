@@ -1,2 +1,2 @@
-from Network.init_network import init_network, _get_largest_connected_component
+from Network.init_network import init_network, get_timestamp_corresponding_to_day
 

@@ -26,4 +26,6 @@ def plot_edge_count(start_timestamp=0, end_timestamp=np.inf, savefig=False) -> N
 
 
 if __name__ == "__main__":
-    plot_edge_count(savefig=False)
+    plot_edge_count(113500, 150000, savefig=False)
+
+    plot_edge_count(113500+86400, 150000+86400)

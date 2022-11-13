@@ -10,7 +10,7 @@ def get_all_network_eda(G, eda_funcs=None) -> dict:
     if eda_funcs is None:
         eda_funcs = [get_number_of_nodes, get_number_of_edges, get_average_degree,
                      get_average_clustering, get_average_shortest_path,
-                     get_diameter, get_max_degree, get_min_degree,
+                     get_diameter, get_max_degree, get_min_degree, get_density,
                      get_degree_centrality, get_betweenness_centrality, get_closeness_centrality]
 
     for func in eda_funcs:
@@ -28,6 +28,8 @@ def get_single_valued_eda_to_dataframe(eda) -> pd.DataFrame:
     def __format(x):
         """very disgusting must be fixed"""
         x = round(x, 2)
+        if x < 1:
+            return x
         return str(x).replace(".0", "")
 
     eda[1] = eda[1].apply(__format)
@@ -115,8 +117,15 @@ def get_min_degree(G, eda):
     eda["Min Degree"] = min_degree
 
 
+def get_density(G, eda):
+    density = nx.density(G)
+    eda["Density"] = density
+
+
 if __name__ == "__main__":
     G_ = init_network(113500, 150000)
     eda0 = get_all_network_eda(G_)
     eda1 = get_single_valued_eda_to_dataframe(eda0)
     build_eda_html(eda1, G_, font_family="monospace", width_dict=["500px", "500px"], font_size="15px")
+
+
