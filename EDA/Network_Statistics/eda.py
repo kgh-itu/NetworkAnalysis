@@ -10,8 +10,7 @@ def get_all_network_eda(G, eda_funcs=None) -> dict:
     if eda_funcs is None:
         eda_funcs = [get_number_of_nodes, get_number_of_edges, get_average_degree,
                      get_average_clustering, get_average_shortest_path,
-                     get_diameter, get_max_degree, get_min_degree, get_density,
-                     get_degree_centrality, get_betweenness_centrality, get_closeness_centrality]
+                     get_diameter, get_max_degree, get_density]
 
     for func in eda_funcs:
         func(G, EDA)
@@ -49,12 +48,12 @@ def build_eda_html(eda: pd.DataFrame, g, filename="eda.html", **kwargs):
 
 def get_number_of_nodes(G, eda):
     num_nodes = len(G.nodes())
-    eda["# Nodes"] = num_nodes
+    eda["# Active Nodes"] = num_nodes
 
 
 def get_number_of_edges(G, eda):
     num_edges = len(G.edges())
-    eda["# Edges"] = num_edges
+    eda["# Active Edges"] = num_edges
 
 
 def get_average_degree(G, eda):
@@ -123,9 +122,10 @@ def get_density(G, eda):
 
 
 if __name__ == "__main__":
-    G_ = init_network(113500, 150000)
-    eda0 = get_all_network_eda(G_)
-    eda1 = get_single_valued_eda_to_dataframe(eda0)
-    build_eda_html(eda1, G_, font_family="monospace", width_dict=["500px", "500px"], font_size="15px")
+    G = init_network(113500, 150000)
+    #eda0 = get_all_network_eda(G)
+    eda =  {}
+    print(get_betweenness_centrality(G, []))
+    #eda1 = get_single_valued_eda_to_dataframe(eda0)
 
 

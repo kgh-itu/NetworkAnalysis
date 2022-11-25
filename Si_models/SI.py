@@ -1,5 +1,5 @@
 import random
-from Network import init_networks_for_all_days, get_non_isolated_nodes_of_all_graphs
+from Network import init_networks_for_all_days, get_non_isolated_nodes_of_all_graphs, init_network
 
 
 def epidemics(beta, start_at_highest_degree=True):
@@ -43,3 +43,4 @@ if __name__ == "__main__":
     infected_ratio, infected_nodes = epidemics(1, start_at_highest_degree=True)
     print(infected_ratio[-1])
     print(get_nodes_not_infected(infected_nodes))
+
