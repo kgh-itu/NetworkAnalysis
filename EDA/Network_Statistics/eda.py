@@ -2,7 +2,6 @@ import networkx as nx
 import pandas as pd
 
 from Network import init_network
-from pretty_html_table import build_table
 
 
 def get_all_network_eda(G, eda_funcs=None) -> dict:
@@ -35,15 +34,6 @@ def get_single_valued_eda_to_dataframe(eda) -> pd.DataFrame:
     eda = eda.rename(columns={0: "", 1: ""})
 
     return eda
-
-
-def build_eda_html(eda: pd.DataFrame, g, filename="eda.html", **kwargs):
-    html = build_table(eda, color="grey_dark", **kwargs)
-    html += f"<p style='font-family:monospace; font-size:15px; font-weight:normal'>" \
-            f"Graph between timestamps ({g.start_timestamp}, {g.end_timestamp})" \
-            f"</p>"
-    with open(filename, "w") as f:
-        f.write(html)
 
 
 def get_number_of_nodes(G, eda):
@@ -119,13 +109,3 @@ def get_min_degree(G, eda):
 def get_density(G, eda):
     density = nx.density(G)
     eda["Density"] = density
-
-
-if __name__ == "__main__":
-    G = init_network(113500, 150000)
-    #eda0 = get_all_network_eda(G)
-    eda =  {}
-    print(get_betweenness_centrality(G, []))
-    #eda1 = get_single_valued_eda_to_dataframe(eda0)
-
-

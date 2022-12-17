@@ -2,13 +2,12 @@ import random
 from Network import init_networks_for_all_days, get_non_isolated_nodes_of_all_graphs, init_network
 
 
-def epidemics(beta, start_at_highest_degree=True):
+def epidemics(beta, start_node):
     all_graphs = init_networks_for_all_days()  # graph for each day in the period 28 total days
     total_node_count = len(get_non_isolated_nodes_of_all_graphs(all_graphs))  #
     G = all_graphs[0]  # first step at day 0
-    if start_at_highest_degree:
-        i_nodes = dict(G.degree())
-        i_nodes = {max(i_nodes, key=i_nodes.get)}
+    if start_node:
+        i_nodes = start_node
     else:
         i_nodes = set(random.sample(set(G.nodes), 1))
     s_at_any_time = set()
@@ -17,7 +16,7 @@ def epidemics(beta, start_at_highest_degree=True):
         G = all_graphs[i]
         i_nodes = si(G, i_nodes, beta, s_at_any_time)
         i_sizes.append(len(i_nodes) / total_node_count)
-    return i_sizes, i_nodes
+    return i_sizes
 
 
 def si(G, i_nodes, beta, s_at_any_time):
