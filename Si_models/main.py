@@ -110,7 +110,7 @@ plt.show()
 # det er 2 ting der påvirker smitten. 1) hvor mange dage en node er aktiv og hvor mange andre den kan smitte på en
 # given dag.
 
-# closeness_c = {i: [] for i in all_nodes}
+# closeness_c = {i: [] for i in girt all_nodes}
 # degree_c = {i: [] for i in all_nodes}
 # betweenness_c = {i: [] for i in all_nodes}
 #
